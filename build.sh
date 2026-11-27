@@ -456,7 +456,6 @@ run_native_tests()
         --parallel "$(test_parallel_level)"
 }
 
-# Unanchored: CMake 4 keeps the e2e tests' labels as the single label "e2e;hardware".
 test_all()
 {
     run_native_tests --label-exclude 'hardware'

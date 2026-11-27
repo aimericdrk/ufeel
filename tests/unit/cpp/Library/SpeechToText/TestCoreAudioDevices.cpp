@@ -17,14 +17,12 @@ namespace
 constexpr auto kNotificationTimeout = std::chrono::seconds(5);
 constexpr auto kNotificationSettleTime = std::chrono::milliseconds(200);
 
-/** An aggregate device that only this process can see, so the test leaves the system untouched. */
 class PrivateAggregateDevice final
 {
 public:
 
     PrivateAggregateDevice()
     {
-        // ctest runs the tests in parallel processes, and two devices cannot share a UID.
         static std::atomic<int> created{0};
         const std::string uid = "UFeel.CoreAudioDevicesTest." + std::to_string(::getpid()) + "." +
                                 std::to_string(created++);
@@ -126,7 +124,6 @@ TEST(
 
         EXPECT_TRUE(waitForChange(changed));
 
-        // Adding a device can send several notifications: clear them before removing it.
         std::this_thread::sleep_for(kNotificationSettleTime);
         static_cast<void>(changed());
     }

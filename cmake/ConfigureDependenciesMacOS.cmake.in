@@ -26,8 +26,6 @@ function(run_tool)
     set(TOOL_OUTPUT "${OUTPUT}" PARENT_SCOPE)
 endfunction()
 
-# Equivalent of patchelf --set-rpath: replaces every LC_RPATH of LIBRARY with RPATH, then signs it
-# again, since install_name_tool invalidates the signature that arm64 binaries must have.
 function(set_rpath LIBRARY RPATH)
     run_tool("${OTOOL_EXECUTABLE}" -l "${LIBRARY}")
     string(REGEX MATCHALL "cmd LC_RPATH\n[^\n]*\n *path [^\n]* \\(offset" COMMANDS "${TOOL_OUTPUT}")
@@ -43,8 +41,6 @@ function(set_rpath LIBRARY RPATH)
     run_tool("${CODESIGN_EXECUTABLE}" --force --sign - "${LIBRARY}")
 endfunction()
 
-# Fails when LIBRARY loads an @rpath library that is not bundled in dependencies/, or a library
-# from an absolute path outside macOS itself (such as a Homebrew one).
 function(check_bundled LIBRARY)
     run_tool("${OTOOL_EXECUTABLE}" -D "${LIBRARY}")
     string(REGEX MATCHALL "@rpath/[^ \n]+" OWN_NAME "${TOOL_OUTPUT}")

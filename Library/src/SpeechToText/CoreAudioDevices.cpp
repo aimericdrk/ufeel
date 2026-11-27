@@ -24,7 +24,6 @@ constexpr std::array kWatchedProperties{
     },
 };
 
-/** Listens on a private queue, so notifications arrive without a run loop on the main thread. */
 class CoreAudioDeviceMonitor final
 {
 public:
@@ -32,8 +31,6 @@ public:
     CoreAudioDeviceMonitor()
         : queue_(dispatch_queue_create("UFeel.CoreAudioDevices", DISPATCH_QUEUE_SERIAL))
     {
-        // The block owns a copy of the flag, so a notification already queued when the monitor is
-        // destroyed never writes to freed memory.
         const std::shared_ptr<std::atomic<bool>> changed = changed_;
 
         listener_ =

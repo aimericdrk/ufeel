@@ -23,7 +23,7 @@
 #ifdef MSG_NOSIGNAL
 constexpr int kLocalHttpServerSendFlags = MSG_NOSIGNAL;
 #else
-constexpr int kLocalHttpServerSendFlags = 0; // macOS sets SO_NOSIGPIPE on the socket instead
+constexpr int kLocalHttpServerSendFlags = 0;
 #endif
 
 class LocalHttpServer
