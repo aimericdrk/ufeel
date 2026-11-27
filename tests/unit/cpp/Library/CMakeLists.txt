@@ -75,11 +75,7 @@ target_link_libraries(
 )
 
 if(UFEEL_ENABLE_EYE_TRACKING)
-    target_link_libraries(
-        run_library_unit_tests
-        PRIVATE
-            "${EYE_TRACKING_LINK_LIBRARIES}"
-    )
+    ufeel_link_eye_tracking(run_library_unit_tests)
 endif()
 
 target_include_directories(run_library_unit_tests PRIVATE

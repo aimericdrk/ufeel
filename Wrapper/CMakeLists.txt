@@ -25,10 +25,7 @@ target_link_libraries(ufeel_wrapper
 )
 
 if(UFEEL_ENABLE_EYE_TRACKING)
-    target_link_libraries(ufeel_wrapper
-        PRIVATE
-            "${EYE_TRACKING_LINK_LIBRARIES}"
-    )
+    ufeel_link_eye_tracking(ufeel_wrapper)
 endif()
 
 target_compile_options(ufeel_wrapper
@@ -44,26 +41,7 @@ set_target_properties(ufeel_wrapper PROPERTIES
     INSTALL_RPATH_USE_LINK_PATH FALSE
 )
 
-if(APPLE)
-    set_target_properties(ufeel_wrapper PROPERTIES
-        INSTALL_RPATH "@loader_path/dependencies"
-        LINK_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/ufeel.exp"
-    )
-    target_link_options(ufeel_wrapper
-        PRIVATE
-            "-Wl,-exported_symbols_list,${CMAKE_CURRENT_SOURCE_DIR}/ufeel.exp"
-    )
-elseif(UNIX)
-    set_target_properties(ufeel_wrapper PROPERTIES
-        INSTALL_RPATH "$ORIGIN/dependencies"
-    )
-    target_link_options(ufeel_wrapper
-        PRIVATE
-            "-Wl,--no-undefined"
-            "-Wl,--exclude-libs,ALL"
-            "-Wl,--version-script=${CMAKE_CURRENT_SOURCE_DIR}/ufeel.map"
-    )
-endif()
+ufeel_configure_wrapper(ufeel_wrapper)
 
 install(
     TARGETS ufeel_wrapper

@@ -29,7 +29,7 @@ target_link_libraries(
     PRIVATE
         GTest::gtest_main
         ufeel_wrapper
-        "${OPENCV_DIR}/lib/libopencv_core${SHARED_SUFFIX}"
+        "${OPENCV_DIR}/lib/libopencv_core${CMAKE_SHARED_LIBRARY_SUFFIX}"
 )
 
 include(GoogleTest)
