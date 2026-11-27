@@ -8,6 +8,14 @@
   python3 Tools/simulate_heartbeat_server.py
   ```
 
+## Build macOS libraries
+
+- `build-macos-3rdparty.sh`: Downloads or builds the libraries of `3rdparty/macos-arm64` (LibTorch, OpenCV, TensorFlow Lite, Vosk) for macOS 14 and later. Run it on an Apple silicon Mac, then commit the result.
+
+  ```bash
+  Tools/build-macos-3rdparty.sh [libtorch|opencv|tensorflowlite|vosk]...
+  ```
+
 ## Test CI
 
 - `test-ci-with-act.sh`: Runs CI jobs locally with [act](https://nektosact.com) on a copy of the working tree in `ufeel-act/` (git-ignored). Requires `act`, Docker, and Git LFS.

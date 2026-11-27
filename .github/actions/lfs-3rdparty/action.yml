@@ -1,15 +1,29 @@
 name: Third-party Git LFS files
 description: Fetches the 3rdparty Git LFS files, restoring .git/lfs/objects from the Actions cache and saving it right after a fetch.
 
+inputs:
+  include:
+    description: Paths to fetch.
+    required: false
+    default: "3rdparty/**"
+  exclude:
+    description: Paths to skip.
+    required: false
+    default: ""
+
 runs:
   using: composite
   steps:
     - name: Compute Git LFS cache key
       id: key
       shell: bash
+      env:
+        INCLUDE: ${{ inputs.include }}
+        EXCLUDE: ${{ inputs.exclude }}
       run: |
-        hash="$(git ls-files -s -- ':(glob)3rdparty/**/*.so' ':(glob)3rdparty/**/*.a' | sha256sum | cut -c1-16)"
-        echo "key=lfs-3rdparty-$hash" >> "$GITHUB_OUTPUT"
+        hash="$(git ls-files -s -- ':(glob)3rdparty/**/*.so' ':(glob)3rdparty/**/*.a' ':(glob)3rdparty/**/*.dylib' | shasum -a 256 | cut -c1-16)"
+        paths="$(printf '%s\n' "$INCLUDE" "$EXCLUDE" | shasum -a 256 | cut -c1-8)"
+        echo "key=lfs-3rdparty-$hash-$paths" >> "$GITHUB_OUTPUT"
 
     - name: Restore Git LFS objects
       id: restore
@@ -20,7 +34,13 @@ runs:
 
     - name: Fetch Git LFS files
       shell: bash
-      run: git lfs pull --include="3rdparty/**"
+      env:
+        INCLUDE: ${{ inputs.include }}
+        EXCLUDE: ${{ inputs.exclude }}
+      run: |
+        options=(--include="$INCLUDE")
+        [[ -z "$EXCLUDE" ]] || options+=(--exclude="$EXCLUDE")
+        git lfs pull "${options[@]}"
 
     - name: Save Git LFS objects
       if: steps.restore.outputs.cache-hit != 'true'

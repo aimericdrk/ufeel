@@ -1,4 +1,4 @@
-set(UFEEL_PREBUILT_DIR "${UFEEL_DEPS_PREFIX}")
+set(UFEEL_PREBUILT_DIR "${THIRDPARTY_DIR}/macos-arm64")
 
 if(NOT CMAKE_SYSTEM_PROCESSOR STREQUAL "arm64")
     message(FATAL_ERROR "macOS builds need an Apple silicon (arm64) Mac")

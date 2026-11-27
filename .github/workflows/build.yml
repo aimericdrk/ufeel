@@ -28,6 +28,8 @@ jobs:
 
       - name: Fetch third-party Git LFS files
         uses: ./.github/actions/lfs-3rdparty
+        with:
+          exclude: "3rdparty/macos-arm64/**"
 
       - name: Build CI Docker image
         uses: ./.github/actions/ci-image
@@ -72,6 +74,11 @@ jobs:
         with:
           lfs: false
           submodules: recursive
+
+      - name: Fetch third-party Git LFS files
+        uses: ./.github/actions/lfs-3rdparty
+        with:
+          include: "3rdparty/macos-arm64/**"
 
       - name: Install build tools
         run: brew install bash ninja
