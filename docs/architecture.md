@@ -33,7 +33,11 @@ flowchart TD
 | Wrapper | [Wrapper/](../Wrapper) | C ABI over `DataProcessor`. Public header: [ufeel.h](../Wrapper/include/ufeel.h). Exports are restricted by [ufeel.map](../Wrapper/ufeel.map) ([ufeel.exp](../Wrapper/ufeel.exp) on macOS). Internals in `Wrapper/src/include/internal`. |
 | Adapters | [Adapters/](../Adapters) | Language adapters over the C ABI (e.g. [C#](../Adapters/csharp/UFeel.Core/README.md)). |
 | Models | [models/](../models) | Model files per domain, each with its license. Installed into the package. |
-| 3rdparty | [3rdparty/](../3rdparty) | Prebuilt dependencies (Linux x86-64) and submodules. On macOS, [build-deps.sh](../build-deps.sh) downloads or builds the prebuilt ones into `.cache/deps`. See [THIRD_PARTY_NOTICES.md](../THIRD_PARTY_NOTICES.md). |
+| 3rdparty | [3rdparty/](../3rdparty) | Prebuilt dependencies (Linux x86-64, and `macos-arm64/`) and submodules. See [THIRD_PARTY_NOTICES.md](../THIRD_PARTY_NOTICES.md). |
+
+## Platforms
+
+Platform-specific build steps (prebuilt libraries, linking, exports, packaging) are in [cmake/platforms/](../cmake/platforms), one file per `CMAKE_SYSTEM_NAME`. A new platform adds its file there and its prebuilt libraries in `3rdparty/`.
 
 ## Feature flags
 
@@ -57,4 +61,4 @@ Each domain (emotions, eye tracking, speech to text, heart rate) is toggled by a
 
 ## Output
 
-`./build.sh all` builds in `build/` and installs the package to `package/release` (or `package/debug`). The package holds `libufeel_wrapper.so` (`libufeel_wrapper.dylib` on macOS), `include/ufeel.h`, `models/`, `dependencies/` and, when requested, `adapters/<name>/`.
+`./build.sh all` builds in `build/` and installs the package to `package/release` (or `package/debug`). The package holds `libufeel_wrapper.so` (`.dylib` on macOS), `include/ufeel.h`, `models/`, `dependencies/` and, when requested, `adapters/<name>/`.

@@ -44,20 +44,20 @@ Note: `./build.sh test` needs no devices. You need a camera and a microphone for
 
 ### macOS (Apple silicon)
 
-Docker cannot reach the camera or the microphone on macOS, so build natively instead:
+Docker cannot access the camera and microphone on macOS, so build natively:
 
 ```bash
-brew install bash cmake ninja
+brew install bash cmake ninja git-lfs
 
 GIT_LFS_SKIP_SMUDGE=1 git clone https://github.com/UFeel-dev/ufeel
 cd ufeel
+git lfs install
 git submodule update --init --recursive
+git lfs pull --include="3rdparty/macos-arm64/**"
 
 ./build.sh all
 ./build.sh test
 ```
-
-The Git LFS files are not needed: the prebuilt libraries in `3rdparty/` are Linux x86-64 only. Instead, the first build downloads LibTorch and Vosk and builds OpenCV and TensorFlow Lite from source into `.cache/deps` (see [Third-Party Libraries](#third-party-libraries)). macOS asks for camera and microphone access for your terminal the first time they are used: allow it, or grant it later in System Settings > Privacy & Security.
 
 To use clang-related tools (e.g. linting, formatting, or IDE features), set up the compilation database:
 
@@ -81,12 +81,13 @@ The generated compilation database from CMake is not always directly usable by a
 
 ### macOS build
 
-- macOS >= 14 on Apple silicon (arm64)
-- Xcode Command Line Tools (Apple Clang, `install_name_tool`, `codesign`)
-- Bash >= 4.4 (macOS ships 3.2)
+- macOS >= 14 on Apple silicon
+- Xcode Command Line Tools
+- Bash >= 4.4
 - CMake >= 3.24
 - Ninja >= 1.13.2
-- .NET SDK 10.0, for the test harness
+- Git LFS >= 3.4.1
+- .NET SDK 10.0
 
 ### Manual build
 
@@ -115,7 +116,7 @@ If some dependencies are missing for your system, please open an issue. The [Doc
 
 This project uses Git LFS to store large third-party libraries in `3rdparty/`, including prebuilt `.so` and `.a` files. yaml-cpp, cpr and PortAudio are Git submodules built from source.
 
-On macOS, [build-deps.sh](build-deps.sh) replaces the prebuilt libraries: it downloads LibTorch and Vosk and builds OpenCV and TensorFlow Lite once into `.cache/deps`, each pinned to a SHA-256, and PortAudio uses CoreAudio.
+The macOS libraries are in `3rdparty/macos-arm64/`, built with [Tools/build-macos-3rdparty.sh](Tools/build-macos-3rdparty.sh).
 After cloning, initialize all submodules and download the Git LFS files:
 
 ```bash

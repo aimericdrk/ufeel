@@ -15,9 +15,7 @@ Automated tests use GoogleTest. Run them inside the [Docker environment](../dock
 
 ## Hardware
 
-Tests labelled `hardware` (the e2e tests) use the real camera, microphone and the fixed heart-rate ports `8000` and `9999`. Run them manually with `./build.sh test-e2e` or `ctest -L hardware`.
-
-On macOS, the first run asks for camera and microphone access for the terminal. Until it is granted in System Settings > Privacy & Security, the camera does not open and the microphone records silence.
+Tests labelled `hardware` (the e2e tests) use the real camera, microphone and the fixed heart-rate ports `8000` and `9999`. Run them manually with `./build.sh test-e2e` or `ctest -L hardware`. On macOS, allow camera and microphone access for the terminal.
 
 Every other test must pass without devices or network. Build `DataProcessor` with `DataProcessorDevices` to replace each device:
 
